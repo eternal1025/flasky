@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, session, redirect, url_for, flash
-from flask_script import Manager
+from flask_script import Manager, Shell
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_wtf import FlaskForm
@@ -44,6 +44,10 @@ class NameForm(FlaskForm):
 	name = StringField('What is your name?', validators=[Required()])
 	submit = SubmitField('Submit')
 
+def make_shell_comtext():
+	return dict(app=app, db=db, User=User, Role=Role)
+manager.add_command("shell", Shell(make_context=make_shell_comtext))
+
 @app.errorhandler(404)
 def page_not_found(e):
 	return render_template('404.html'), 404
@@ -71,14 +75,3 @@ def index():
 if __name__ == '__main__':
 	#db.create_all()
 	manager.run()
-
-
-
-
-
-
-
-
-
-
-
